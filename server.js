@@ -27,7 +27,9 @@ server.listen(process.env.PORT || 9091, () => {
 let tech = io.of('/tech');
 
 tech.on('connection',(socket) => {
+    console.log("connetion is being tried------------------------>")
     socket.on('join',(data)=> {
+        console.log("data while connection------------------->",data);
         socket.join(data.room);
         socket.emit('message',`Welcome to ${data.room} room`)
         //tech.in(data.room).emit('message',`new user joined the ${data.room} room `)
