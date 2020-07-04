@@ -20,7 +20,7 @@ app.get('/css',(req,res,next) => {
     res.sendFile(__dirname+'/public/css.html')
 });
 
-server.listen(port, () => {
+server.listen(process.env.PORT || 9091, () => {
     console.log(`Server running on ${port}`);
 })
 
