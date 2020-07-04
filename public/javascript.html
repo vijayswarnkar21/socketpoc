@@ -1,0 +1,82 @@
+<html>
+
+<head>
+    <title>Chatter/JAVASCRIPT</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <style>
+        form {
+            padding: 20px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding-right: 50px
+        }
+
+        #messages {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            width: 100%
+        }
+
+        #messages li {
+            padding: 5px 10px;
+        }
+
+        #messages li:nth-child(odd) {
+            background: orange
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <ul id="messages"></ul>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <form action="" id="the_chat_form">
+                    <div class="input-group mb-3">
+                        <input id="m" autocomplete="off" type="text" class="form-control" placeholder="Message"
+                            aria-label="Recipient's username" aria-describedby="message">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Send</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io.connect("http://localhost:9091/tech");
+        const room = "Javascript";
+        //jquery
+        $('form').submit(() => {
+            let msg = $('#m').val();
+            socket.emit("in_message",{room,msg});
+            $('#m').val('')
+            return false
+        });
+        socket.on('connect',()=> {
+            //emitting to everybody
+            socket.emit('join',{room: room})
+        })
+        socket.on("message",(data) => {
+            $('#messages').append($('<li>').text(data))
+        });
+    </script>
+</body>
+
+</html>
